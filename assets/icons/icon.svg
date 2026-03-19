@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="bugGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bgGrad)"/>
+  
+  <!-- Bug Body -->
+  <g transform="translate(64, 68)">
+    <!-- Legs Left -->
+    <path d="M-18,-8 L-32,-20 M-18,0 L-34,0 M-18,8 L-32,20" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+    <!-- Legs Right -->
+    <path d="M18,-8 L32,-20 M18,0 L34,0 M18,8 L32,20" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Antennae -->
+    <path d="M-6,-22 L-12,-36" stroke="#93c5fd" stroke-width="3" stroke-linecap="round"/>
+    <path d="M6,-22 L12,-36" stroke="#93c5fd" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="-12" cy="-38" r="3" fill="#f87171"/>
+    <circle cx="12" cy="-38" r="3" fill="#f87171"/>
+    
+    <!-- Body -->
+    <ellipse cx="0" cy="0" rx="18" ry="24" fill="url(#bugGrad)"/>
+    
+    <!-- Body Stripes -->
+    <path d="M-14,-8 Q0,-12 14,-8" stroke="#1e40af" stroke-width="2" fill="none" opacity="0.5"/>
+    <path d="M-15,0 Q0,-4 15,0" stroke="#1e40af" stroke-width="2" fill="none" opacity="0.5"/>
+    <path d="M-14,8 Q0,4 14,8" stroke="#1e40af" stroke-width="2" fill="none" opacity="0.5"/>
+    
+    <!-- Head -->
+    <circle cx="0" cy="-22" r="10" fill="#60a5fa"/>
+    <circle cx="-4" cy="-24" r="3" fill="#1e3a8a"/>
+    <circle cx="4" cy="-24" r="3" fill="#1e3a8a"/>
+    <circle cx="-3" cy="-23" r="1" fill="#fff"/>
+    <circle cx="5" cy="-23" r="1" fill="#fff"/>
+    
+    <!-- Smile -->
+    <path d="M-3,-18 Q0,-15 3,-18" stroke="#1e3a8a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Checkbox at corner (top-right) -->
+  <g transform="translate(88, 28)">
+    <!-- Box -->
+    <rect x="-18" y="-18" width="36" height="36" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <!-- Checkmark -->
+    <path d="M-10,2 L-3,10 L12,-8" stroke="#10b981" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
