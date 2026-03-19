@@ -118,7 +118,9 @@ BountyChecklist/
 
 ## Screenshots
 
-*(Add screenshots here)*
+![Popup](screenshots/popup.png)
+
+![Sidepanel](screenshots/sidepanel.png)
 
 ## Contributing
 
