@@ -3,6 +3,8 @@
   let data = null;
   let currentCat = null;
   let favorites = [];
+  let externalPayloadsCache = {};
+  const PAYLOADS_BASE_URL = 'https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads';
 
   const sidebarRoot = document.getElementById('sidebarRoot');
   const categoriesEl = document.getElementById('categories');
@@ -169,18 +171,121 @@
 
     if (item.type === 'payloads') {
       renderPayloads(item);
+    } else if (item.type === 'external-payloads') {
+      renderExternalPayloads(item);
     } else {
       renderList(item);
     }
   }
 
+  function loadExternalPayloads(payloadFile) {
+    return new Promise(function(resolve, reject) {
+      if (externalPayloadsCache[payloadFile]) {
+        resolve(externalPayloadsCache[payloadFile]);
+        return;
+      }
+
+      fetch(PAYLOADS_BASE_URL + '/' + payloadFile)
+        .then(function(r) {
+          if (!r.ok) throw new Error('Failed to load ' + payloadFile);
+          return r.json();
+        })
+        .then(function(d) {
+          var payloads;
+          if (Array.isArray(d)) {
+            payloads = d;
+          } else if (d.payloads && Array.isArray(d.payloads)) {
+            payloads = d.payloads;
+          } else if (typeof d === 'object') {
+            var keys = Object.keys(d);
+            if (keys.length > 0 && typeof d[keys[0]] === 'string') {
+              payloads = keys.map(function(k) { return k; });
+            } else {
+              payloads = keys.map(function(k) { return d[k]; });
+            }
+          } else {
+            payloads = [];
+          }
+          externalPayloadsCache[payloadFile] = payloads;
+          resolve(payloads);
+        })
+        .catch(function(err) {
+          console.error('Error loading external payloads:', err);
+          showToast('Failed to load payloads. Check your internet connection.');
+          resolve([]);
+        });
+    });
+  }
+
+  function renderExternalPayloads(item) {
+    mainPanel.innerHTML = '<div class="content-header"><div class="content-title">' + item.name + '</div>' +
+      '<div class="content-subtitle">Loading ' + item.payloadFile + '...</div></div>' +
+      '<div class="content-body"><p>Fetching payloads from external repository...</p></div>';
+
+    loadExternalPayloads(item.payloadFile).then(function(payloads) {
+      if (!payloads || payloads.length === 0) {
+        mainPanel.innerHTML = '<div class="content-header"><div class="content-title">' + item.name + '</div>' +
+          '<div class="content-subtitle">No payloads loaded</div></div>' +
+          '<div class="content-body"><p>Could not load payloads. Please check your internet connection.</p></div>';
+        return;
+      }
+
+      var count = payloads.length || Object.keys(payloads).length;
+      var allPayloads = payloads.map(function(p) {
+        return typeof p === 'string' ? p : (p.payload || p.code || JSON.stringify(p));
+      }).join('\n');
+
+      var html = '<div class="payload-list-wrapper">';
+      html += '<div class="content-header sticky"><div class="content-title">' + item.name + '</div>' +
+        '<div class="content-subtitle">' + count + ' payloads (external)</div>' +
+        '<button class="copy-all-btn" data-payloads="' + encodeURIComponent(allPayloads) + '">Copy All</button></div>';
+
+      if (Array.isArray(payloads)) {
+        html += '<div class="payload-grid">';
+        for (var i = 0; i < Math.min(payloads.length, 500); i++) {
+          var p = payloads[i];
+          var display = typeof p === 'string' ? p : (p.payload || p.code || JSON.stringify(p));
+          html += '<div class="payload-item" data-payload="' + encodeURIComponent(display) + '"><span class="payload-text">' + esc(display) + '</span></div>';
+        }
+        if (payloads.length > 500) {
+          html += '<div class="payload-item" style="background:var(--bg2);color:var(--text2)">... and ' + (payloads.length - 500) + ' more payloads</div>';
+        }
+        html += '</div>';
+      } else {
+        html += '<div class="content-body"><p>Payload data format not recognized.</p></div>';
+      }
+      html += '</div>';
+
+      mainPanel.innerHTML = html;
+
+      var items = mainPanel.querySelectorAll('.payload-item');
+      for (var j = 0; j < items.length; j++) {
+        items[j].addEventListener('click', (function(el) {
+          return function() { copy(decodeURIComponent(el.dataset.payload)); };
+        })(items[j]));
+      }
+
+      var copyAllBtn = mainPanel.querySelector('.copy-all-btn');
+      if (copyAllBtn) {
+        copyAllBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          copy(decodeURIComponent(this.dataset.payloads));
+        });
+      }
+    });
+  }
+
   function renderPayloads(item) {
-    var html = '<div class="content-header"><div class="content-title">' + item.name + '</div>' +
-      '<div class="content-subtitle">' + item.payloads.length + ' payloads</div></div>' +
+    var allPayloads = item.payloads.join('\n');
+    var html = '<div class="payload-list-wrapper">';
+    html += '<div class="content-header sticky"><div class="content-title">' + item.name + '</div>' +
+      '<div class="content-subtitle">' + item.payloads.length + ' payloads</div>' +
+      '<button class="copy-all-btn" data-payloads="' + encodeURIComponent(allPayloads) + '">Copy All</button></div>' +
       '<div class="payload-grid">';
     for (var i = 0; i < item.payloads.length; i++) {
-      html += '<div class="payload-item" data-payload="' + encodeURIComponent(item.payloads[i]) + '">' + esc(item.payloads[i]) + '</div>';
+      html += '<div class="payload-item" data-payload="' + encodeURIComponent(item.payloads[i]) + '"><span class="payload-text">' + esc(item.payloads[i]) + '</span></div>';
     }
+    html += '</div>';
     html += '</div>';
     mainPanel.innerHTML = html;
 
@@ -189,6 +294,14 @@
       items[j].addEventListener('click', (function(el) {
         return function() { copy(decodeURIComponent(el.dataset.payload)); };
       })(items[j]));
+    }
+
+    var copyAllBtn = mainPanel.querySelector('.copy-all-btn');
+    if (copyAllBtn) {
+      copyAllBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        copy(decodeURIComponent(this.dataset.payloads));
+      });
     }
   }
 
@@ -300,26 +413,60 @@
   }
 
   function search(query) {
-    if (!query.trim() || !data) { renderContent(); return; }
+    if (!data) { return; }
+    
+    if (!query.trim()) {
+      if (currentCat) {
+        renderContent();
+      }
+      return;
+    }
+    
     var q = query.toLowerCase();
     var results = [];
+    var seen = {};
 
     for (var c = 0; c < data.categories.length; c++) {
       var cat = data.categories[c];
       for (var i = 0; i < cat.items.length; i++) {
         var item = cat.items[i];
-        if (item.type === 'payloads') {
+        if (item.type === 'payloads' && item.payloads) {
           for (var p = 0; p < item.payloads.length; p++) {
-            if (item.payloads[p].toLowerCase().indexOf(q) !== -1) {
-              results.push({ cat: cat, item: item, content: item.payloads[p] });
+            if (typeof item.payloads[p] === 'string' && item.payloads[p].toLowerCase().indexOf(q) !== -1) {
+              var key = cat.id + '|' + item.id + '|' + item.payloads[p];
+              if (!seen[key]) {
+                seen[key] = true;
+                results.push({ cat: cat, item: item, content: item.payloads[p] });
+              }
+            }
+          }
+        } else if (item.type === 'external-payloads') {
+          if (externalPayloadsCache[item.payloadFile]) {
+            var extPayloads = externalPayloadsCache[item.payloadFile];
+            if (Array.isArray(extPayloads)) {
+              for (var ep = 0; ep < extPayloads.length; ep++) {
+                var p = extPayloads[ep];
+                var searchStr = typeof p === 'string' ? p : (p.payload || p.code || JSON.stringify(p));
+                if (searchStr.toLowerCase().indexOf(q) !== -1) {
+                  var key = cat.id + '|' + item.payloadFile + '|' + searchStr;
+                  if (!seen[key]) {
+                    seen[key] = true;
+                    results.push({ cat: cat, item: item, content: searchStr });
+                  }
+                }
+              }
             }
           }
         } else if (item.content) {
           for (var b = 0; b < item.content.length; b++) {
             var block = item.content[b];
-            var searchable = block.text || block.title || block.code || '';
-            if (searchable.toLowerCase().indexOf(q) !== -1) {
-              results.push({ cat: cat, item: item, content: block });
+            var searchable = block.text || block.title || (typeof block.code === 'string' ? block.code : '') || '';
+            if (searchable && searchable.toLowerCase && searchable.toLowerCase().indexOf(q) !== -1) {
+              var blockKey = cat.id + '|' + item.id + '|' + b + '|' + searchable.substring(0, 50);
+              if (!seen[blockKey]) {
+                seen[blockKey] = true;
+                results.push({ cat: cat, item: item, content: block });
+              }
             }
           }
         }
@@ -397,11 +544,23 @@
           for (var p = 0; p < item.payloads.length; p++) {
             payloads.push({ cat: cat, payload: item.payloads[p] });
           }
+        } else if (item.type === 'external-payloads' && externalPayloadsCache[item.payloadFile]) {
+          var extPayloads = externalPayloadsCache[item.payloadFile];
+          if (Array.isArray(extPayloads)) {
+            for (var ep = 0; ep < extPayloads.length; ep++) {
+              var p = extPayloads[ep];
+              var payloadStr = typeof p === 'string' ? p : (p.payload || p.code || JSON.stringify(p));
+              payloads.push({ cat: cat, payload: payloadStr });
+            }
+          }
         }
       }
     }
 
-    if (payloads.length === 0) return;
+    if (payloads.length === 0) {
+      mainPanel.innerHTML = '<div class="welcome"><div class="welcome-icon">🎲</div><h2>No payloads loaded</h2><p>Click on a payload category first to load payloads</p></div>';
+      return;
+    }
     var r = payloads[Math.floor(Math.random() * payloads.length)];
 
     mainPanel.innerHTML = '<div class="content-header"><div class="content-title">🎲 Random Payload</div><div class="content-subtitle">' + r.cat.icon + ' ' + r.cat.name + '</div></div>' +

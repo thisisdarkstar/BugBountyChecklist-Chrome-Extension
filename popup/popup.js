@@ -1,14 +1,25 @@
 // BountyChecklist Popup
 (function() {
   const categories = [
-    { id: 'rce', name: 'RCE', icon: '💥' },
-    { id: 'sql-injection', name: 'SQLi', icon: '🗄️' },
-    { id: 'rxss', name: 'XSS', icon: '⚡' },
-    { id: 'ssrf-techniques', name: 'SSRF', icon: '🌐' },
-    { id: 'idor-vulnerability', name: 'IDOR', icon: '🔓' },
-    { id: 'ssti-techniques', name: 'SSTI', icon: '📝' },
-    { id: 'xxe-vulnerabilities', name: 'XXE', icon: '📄' },
-    { id: 'command-injection', name: 'CMD', icon: '💻' }
+    { id: '2fa-bypass', name: '2FA', icon: '🔐' },
+    { id: '403-bypass', name: '403 Bypass', icon: '🚫' },
+    { id: 'acount-takeover', name: 'ATO', icon: '🔍' },
+    { id: 'admin-panal', name: 'Admin', icon: '⚙️' },
+    { id: 'sql-injection', name: 'SQLi', icon: '💉' },
+    { id: 'xss', name: 'XSS', icon: '⚠️' },
+    { id: 'ssrf', name: 'SSRF', icon: '🔄' },
+    { id: 'rce', name: 'RCE', icon: '💻' },
+    { id: 'ssti', name: 'SSTI', icon: '📝' },
+    { id: 'xxe', name: 'XXE', icon: '📄' },
+    { id: 'cmd-injection', name: 'CMD', icon: '⌨️' },
+    { id: 'path-traversal', name: 'LFI/PT', icon: '📂' },
+    { id: 'open-redirect', name: 'Redirect', icon: '🔀' },
+    { id: 'subdomain-takeover', name: 'Sub Takeover', icon: '🌐' },
+    { id: 'graphql', name: 'GraphQL', icon: '🔷' },
+    { id: 'jwt-testing', name: 'JWT', icon: '🎫' },
+    { id: 'html-injection', name: 'HTMLi', icon: '🏷️' },
+    { id: 'wordpress-testing', name: 'WordPress', icon: '📝' },
+    { id: 'bug-bounty-dorks', name: 'Dorks', icon: '🔍' }
   ];
 
   document.addEventListener('DOMContentLoaded', init);

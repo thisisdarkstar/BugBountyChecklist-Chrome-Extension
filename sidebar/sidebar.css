@@ -290,22 +290,62 @@ body {
 }
 
 .content-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.75rem;
   background: var(--bg2);
   border-radius: 8px;
   margin-bottom: 0.75rem;
 }
 
+.content-header.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 0;
+}
+
+.content-header > * {
+  flex-shrink: 0;
+}
+
 .content-title { 
   font-size: 1.1rem; 
   font-weight: 700; 
-  margin-bottom: 0.15rem;
+  margin-bottom: 0;
   word-break: break-word;
+  flex: 1;
+  min-width: 0;
 }
 
 .content-subtitle { 
   font-size: 0.85rem; 
   color: var(--text3); 
+}
+
+.copy-all-btn {
+  padding: 0.3rem 0.75rem;
+  border: none;
+  background: var(--success);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.copy-all-btn:hover { 
+  background: #059669;
+}
+
+.payload-list-wrapper {
+  display: flex;
+  flex-direction: column;
 }
 
 .content-body {
@@ -483,31 +523,36 @@ body {
 }
 
 .payload-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.4rem;
 }
 
 .payload-item {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.5rem;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
   font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.15s;
   word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+  min-width: 0;
 }
 
 .payload-item:hover { 
   border-color: var(--accent); 
   background: var(--bg3); 
+}
+
+.payload-text {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  display: block;
 }
 
 .desc { 
