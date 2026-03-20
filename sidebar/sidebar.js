@@ -4,9 +4,7 @@
   let currentCat = null;
   let favorites = [];
   let externalPayloadsCache = {};
-  const PAYLOADS_BASE_URL = 'https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads';
 
-  const sidebarRoot = document.getElementById('sidebarRoot');
   const categoriesEl = document.getElementById('categories');
   const mainPanel = document.getElementById('mainPanel');
   const welcome = document.getElementById('welcome');
@@ -169,25 +167,23 @@
     var item = currentCat.items[0];
     if (!item) return;
 
-    if (item.type === 'payloads') {
-      renderPayloads(item);
-    } else if (item.type === 'external-payloads') {
+    if (item.type === 'external-payloads') {
       renderExternalPayloads(item);
     } else {
       renderList(item);
     }
   }
 
-  function loadExternalPayloads(payloadFile) {
+  function loadExternalPayloads(url) {
     return new Promise(function(resolve, reject) {
-      if (externalPayloadsCache[payloadFile]) {
-        resolve(externalPayloadsCache[payloadFile]);
+      if (externalPayloadsCache[url]) {
+        resolve(externalPayloadsCache[url]);
         return;
       }
 
-      fetch(PAYLOADS_BASE_URL + '/' + payloadFile)
+      fetch(url)
         .then(function(r) {
-          if (!r.ok) throw new Error('Failed to load ' + payloadFile);
+          if (!r.ok) throw new Error('Failed to load ' + url);
           return r.json();
         })
         .then(function(d) {
@@ -206,7 +202,7 @@
           } else {
             payloads = [];
           }
-          externalPayloadsCache[payloadFile] = payloads;
+          externalPayloadsCache[url] = payloads;
           resolve(payloads);
         })
         .catch(function(err) {
@@ -219,10 +215,10 @@
 
   function renderExternalPayloads(item) {
     mainPanel.innerHTML = '<div class="content-header"><div class="content-title">' + item.name + '</div>' +
-      '<div class="content-subtitle">Loading ' + item.payloadFile + '...</div></div>' +
+      '<div class="content-subtitle">Loading from ' + item.url + '...</div></div>' +
       '<div class="content-body"><p>Fetching payloads from external repository...</p></div>';
 
-    loadExternalPayloads(item.payloadFile).then(function(payloads) {
+    loadExternalPayloads(item.url).then(function(payloads) {
       if (!payloads || payloads.length === 0) {
         mainPanel.innerHTML = '<div class="content-header"><div class="content-title">' + item.name + '</div>' +
           '<div class="content-subtitle">No payloads loaded</div></div>' +
@@ -273,36 +269,6 @@
         });
       }
     });
-  }
-
-  function renderPayloads(item) {
-    var allPayloads = item.payloads.join('\n');
-    var html = '<div class="payload-list-wrapper">';
-    html += '<div class="content-header sticky"><div class="content-title">' + item.name + '</div>' +
-      '<div class="content-subtitle">' + item.payloads.length + ' payloads</div>' +
-      '<button class="copy-all-btn" data-payloads="' + encodeURIComponent(allPayloads) + '">Copy All</button></div>' +
-      '<div class="payload-grid">';
-    for (var i = 0; i < item.payloads.length; i++) {
-      html += '<div class="payload-item" data-payload="' + encodeURIComponent(item.payloads[i]) + '"><span class="payload-text">' + esc(item.payloads[i]) + '</span></div>';
-    }
-    html += '</div>';
-    html += '</div>';
-    mainPanel.innerHTML = html;
-
-    var items = mainPanel.querySelectorAll('.payload-item');
-    for (var j = 0; j < items.length; j++) {
-      items[j].addEventListener('click', (function(el) {
-        return function() { copy(decodeURIComponent(el.dataset.payload)); };
-      })(items[j]));
-    }
-
-    var copyAllBtn = mainPanel.querySelector('.copy-all-btn');
-    if (copyAllBtn) {
-      copyAllBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        copy(decodeURIComponent(this.dataset.payloads));
-      });
-    }
   }
 
   function renderList(item) {
@@ -441,14 +407,14 @@
             }
           }
         } else if (item.type === 'external-payloads') {
-          if (externalPayloadsCache[item.payloadFile]) {
-            var extPayloads = externalPayloadsCache[item.payloadFile];
+          if (externalPayloadsCache[item.url]) {
+            var extPayloads = externalPayloadsCache[item.url];
             if (Array.isArray(extPayloads)) {
               for (var ep = 0; ep < extPayloads.length; ep++) {
                 var p = extPayloads[ep];
                 var searchStr = typeof p === 'string' ? p : (p.payload || p.code || JSON.stringify(p));
                 if (searchStr.toLowerCase().indexOf(q) !== -1) {
-                  var key = cat.id + '|' + item.payloadFile + '|' + searchStr;
+                  var key = cat.id + '|' + item.url + '|' + searchStr;
                   if (!seen[key]) {
                     seen[key] = true;
                     results.push({ cat: cat, item: item, content: searchStr });
@@ -540,12 +506,8 @@
       var cat = data.categories[c];
       for (var i = 0; i < cat.items.length; i++) {
         var item = cat.items[i];
-        if (item.type === 'payloads') {
-          for (var p = 0; p < item.payloads.length; p++) {
-            payloads.push({ cat: cat, payload: item.payloads[p] });
-          }
-        } else if (item.type === 'external-payloads' && externalPayloadsCache[item.payloadFile]) {
-          var extPayloads = externalPayloadsCache[item.payloadFile];
+        if (item.type === 'external-payloads' && externalPayloadsCache[item.url]) {
+          var extPayloads = externalPayloadsCache[item.url];
           if (Array.isArray(extPayloads)) {
             for (var ep = 0; ep < extPayloads.length; ep++) {
               var p = extPayloads[ep];

